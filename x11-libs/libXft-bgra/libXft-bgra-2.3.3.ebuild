@@ -1,0 +1,48 @@
+# Copyright 1999-2020 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=7
+
+XORG_MULTILIB=yes
+inherit xorg-3
+
+DESCRIPTION="X.Org Xft library with BGRA glyph (color emoji) rendering & scaling patches by Maxime Coste"
+
+SRC_URI="https://xorg.freedesktop.org/releases/individual/lib/libXft-${PVR}.tar.bz2"
+
+S="${WORKDIR}/libXft-${PVR}"
+
+SLOT="0"
+
+KEYWORDS="~alpha amd64 arm arm64 hppa ia64 ~mips ppc ppc64 s390 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris ~x86-winnt"
+IUSE="doc"
+
+RDEPEND="
+	!x11-libs/libXft
+	>=media-libs/fontconfig-2.10.92[${MULTILIB_USEDEP}]
+	>=media-libs/freetype-2.5.0.1[${MULTILIB_USEDEP}]
+	virtual/ttf-fonts
+	>=x11-libs/libX11-1.6.2[${MULTILIB_USEDEP}]
+	>=x11-libs/libXext-1.3.2[${MULTILIB_USEDEP}]
+	>=x11-libs/libXrender-0.9.8[${MULTILIB_USEDEP}]"
+DEPEND="${RDEPEND}
+	x11-base/xorg-proto"
+
+PATCHES=( "${FILESDIR}"/bgra.patch )
+
+src_configure() {
+		./configure --prefix=/usr --build=x86_64-pc-linux-gnu \
+		--host=x86_64-pc-linux-gnu --mandir=/usr/share/man --infodir=/usr/share/info \
+		--datadir=/usr/share --sysconfdir=/etc --localstatedir=/var/lib --disable-dependency-tracking \
+		--disable-silent-rules --docdir=/usr/share/doc/libXft-${PVR} --htmldir=/usr/share/doc/libXft-${PVR}/html \
+		--with-sysroot=/ --libdir=/usr/lib64 --disable-selective-werror --enable-shared --disable-static
+}
+
+src_compile() {
+	emake
+}
+
+src_install() {
+	emake DESTDIR="${D}" install
+}
+
