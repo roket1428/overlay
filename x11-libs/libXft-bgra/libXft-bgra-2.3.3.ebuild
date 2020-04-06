@@ -31,11 +31,7 @@ DEPEND="${RDEPEND}
 PATCHES=( "${FILESDIR}"/bgra.patch )
 
 src_configure() {
-		./configure --prefix=/usr --build=x86_64-pc-linux-gnu \
-		--host=x86_64-pc-linux-gnu --mandir=/usr/share/man --infodir=/usr/share/info \
-		--datadir=/usr/share --sysconfdir=/etc --localstatedir=/var/lib --disable-dependency-tracking \
-		--disable-silent-rules --docdir=/usr/share/doc/libXft-${PVR} --htmldir=/usr/share/doc/libXft-${PVR}/html \
-		--with-sysroot=/ --libdir=/usr/lib64 --disable-selective-werror --enable-shared --disable-static
+	econf
 }
 
 src_compile() {
